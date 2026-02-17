@@ -19,7 +19,7 @@ async function signup() {
 
 /* LOGIN */
 async function login() {
-  const res = await fetch(API + "/auth/login", {
+  const res = await fetch(API + "http://54.221.9.161/api/auth/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
