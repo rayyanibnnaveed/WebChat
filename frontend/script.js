@@ -1,4 +1,4 @@
-const API = "http://54.221.9.161//api";
+const API = "http://54.221.9.161/api";
 
 /* SIGNUP */
 async function signup() {
