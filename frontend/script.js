@@ -63,16 +63,34 @@ async function loadPosts() {
     postsDiv.innerHTML = ""; // Clear previous posts
 
     data.forEach((p) => {
-      postsDiv.innerHTML += `
-        <div class="post">
-          <b>${p.name}</b> <span class="date">${p.created_at}</span>
-          <p>${p.content}</p>
-        </div>
-      `;
-    });
+  postsDiv.innerHTML += `
+    <div class="message-card">
+      <div>
+        <b>${p.name}</b>
+        <small>${new Date(p.created_at).toLocaleString()}</small>
+      </div>
+      <p>${p.content}</p>
+      <button onclick="deletePost(${p.id})">Delete</button>
+    </div>
+  `;
+});
+
   } catch (err) {
     console.error("Error loading posts:", err);
   }
+}
+
+async function deletePost(id) {
+  const token = localStorage.getItem("token");
+
+  await fetch(API + "/posts/" + id, {
+    method: "DELETE",
+    headers: {
+      Authorization: token,
+    },
+  });
+
+  loadPosts();
 }
 
 // Initial load

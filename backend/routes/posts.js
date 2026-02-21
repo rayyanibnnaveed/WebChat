@@ -19,7 +19,7 @@ function auth(req, res, next) {
   });
 }
 
-/* CREATE POST (1 PER DAY) */
+
 /* CREATE POST */
 router.post("/", auth, (req, res) => {
   const { content } = req.body;
@@ -45,11 +45,29 @@ router.post("/", auth, (req, res) => {
 /* GET POSTS */
 router.get("/", (req, res) => {
   db.query(
-    "SELECT users.name, posts.content, posts.created_at FROM posts JOIN users ON posts.user_id=users.id ORDER BY posts.created_at DESC",
+    "SELECT posts.id, users.name, posts.content, posts.created_at FROM posts JOIN users ON posts.user_id=users.id ORDER BY posts.created_at DESC",
     (err, data) => {
       res.json(data);
     }
   );
 });
+/* DELETE POST */
+router.delete("/:id", auth, (req, res) => {
+  const postId = req.params.id;
+  const userId = req.user.id;
 
+  db.query(
+    "DELETE FROM posts WHERE id=? AND user_id=?",
+    [postId, userId],
+    (err, result) => {
+      if (err)
+        return res.status(500).json({ message: "DB Error" });
+
+      if (result.affectedRows === 0)
+        return res.status(403).json({ message: "Not allowed" });
+
+      res.json({ message: "Post deleted" });
+    }
+  );
+});
 module.exports = router;
