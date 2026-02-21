@@ -31,6 +31,8 @@ async function login() {
   const data = await res.json();
 
   localStorage.setItem("token", data.token);
+  localStorage.setItem("userId", data.user.id); // 👈 ADD THIS
+  localStorage.setItem("userName", data.user.name); // optional but useful
 
   window.location = "dashboard.html";
 }
@@ -63,23 +65,30 @@ async function loadPosts() {
 
     const postsDiv = document.getElementById("posts");
 
-    data.forEach((p) => {
-      // If post already exists, skip it
-      if (!document.getElementById("post-" + p.id)) {
-        const postHTML = `
-          <div class="message-card" id="post-${p.id}">
-            <div>
-              <b>${p.name}</b>
-              <small>${new Date(p.created_at).toLocaleString()}</small>
-            </div>
-            <p>${p.content}</p>
-            <button onclick="deletePost(${p.id})">Delete</button>
-          </div>
-        `;
+    const loggedInUserId = localStorage.getItem("userId");
 
-        postsDiv.insertAdjacentHTML("beforeend", postHTML);
-      }
-    });
+data.forEach((p) => {
+  if (!document.getElementById("post-" + p.id)) {
+
+    const isMyMessage = p.user_id == loggedInUserId;
+
+    const postHTML = `
+      <div 
+        class="message-card ${isMyMessage ? "my-message" : "other-message"}"
+        id="post-${p.id}"
+      >
+        <div>
+          <b>${p.name}</b>
+          <small>${new Date(p.created_at).toLocaleString()}</small>
+        </div>
+        <p>${p.content}</p>
+        <button onclick="deletePost(${p.id})">Delete</button>
+      </div>
+    `;
+
+    postsDiv.insertAdjacentHTML("beforeend", postHTML);
+  }
+});
 
   } catch (err) {
     console.error("Error loading posts:", err);

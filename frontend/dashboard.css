@@ -121,13 +121,24 @@ body {
   padding: 14px 16px;
   border-radius: 18px;
   background: #dcf8c6;
-  align-self: flex-end; /* pushes to right */
   position: relative;
   font-size: 14px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.08);
   animation: fadeIn 0.2s ease-in-out;
 }
+/* Messages from other users */
+.other-message {
+  align-self: flex-start;
+  background: #ffffff;
+  color: #333;
+}
 
+/* Messages from logged in user */
+.my-message {
+  align-self: flex-end;
+  background: #dcf8c6;
+  color: #222;
+}
 /* Sender name */
 .message-card b {
   font-size: 13px;
