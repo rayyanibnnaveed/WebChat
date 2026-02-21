@@ -34,9 +34,7 @@ router.post("/", auth, (req, res) => {
     "INSERT INTO posts(user_id,content,created_at) VALUES(?,?,?)",
     [userId, content, now],
     (err) => {
-      if (err) return res.status(500).json({ message: "DB Error" });
-
-      res.json({ message: "Post added" });
+      
     }
   );
 });
