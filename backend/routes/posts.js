@@ -20,6 +20,7 @@ function auth(req, res, next) {
 }
 
 /* CREATE POST (1 PER DAY) */
+/* CREATE POST */
 router.post("/", auth, (req, res) => {
   const { content } = req.body;
   const userId = req.user.id;
@@ -27,27 +28,19 @@ router.post("/", auth, (req, res) => {
   if (!content)
     return res.status(400).json({ message: "Content required" });
 
-  const today = new Date().toISOString().slice(0, 10);
+  const now = new Date();
 
   db.query(
-    "SELECT * FROM posts WHERE user_id=? AND created_at=?",
-    [userId, today],
-    (err, result) => {
-      if (result.length > 0)
-        return res
-          .status(400)
-          .json({ message: "Already posted today" });
+    "INSERT INTO posts(user_id,content,created_at) VALUES(?,?,?)",
+    [userId, content, now],
+    (err) => {
+      if (err) return res.status(500).json({ message: "DB Error" });
 
-      db.query(
-        "INSERT INTO posts(user_id,content,created_at) VALUES(?,?,?)",
-        [userId, content, today],
-        () => {
-          res.json({ message: "Post added" });
-        }
-      );
+      res.json({ message: "Post added" });
     }
   );
 });
+
 
 /* GET POSTS */
 router.get("/", (req, res) => {
