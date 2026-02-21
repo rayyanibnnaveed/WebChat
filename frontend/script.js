@@ -146,7 +146,8 @@ async function loadPosts() {
       // Auto scroll if user is near bottom
       scrollToBottomIfNeeded(postsDiv);
     });
-
+console.log("Logged in:", loggedInUserId);
+console.log("Post user:", p.user_id);
   } catch (err) {
     console.error("Error loading posts:", err);
   }
