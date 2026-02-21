@@ -28,7 +28,7 @@ router.post("/", auth, (req, res) => {
   if (!content)
     return res.status(400).json({ message: "Content required" });
 
-  const now = new Date();
+  const now = new Date().toISOString();
 
   db.query(
     "INSERT INTO posts(user_id,content,created_at) VALUES(?,?,?)",
