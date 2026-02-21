@@ -17,6 +17,20 @@ function parseJwt(token) {
     return null;
   }
 }
+
+function formatTime(dateString) {
+  const date = new Date(dateString);
+
+  return date.toLocaleString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    timeZoneName: "short"
+  });
+}
 /* ========================= */
 /* GLOBALS */
 /* ========================= */
@@ -131,7 +145,7 @@ async function loadPosts() {
         >
           <div>
             <b>${p.name}</b>
-            <small>${new Date(p.created_at).toLocaleString()}</small>
+            <small>${new Date(p.created_at).toLocaleTimeString()}</small>
           </div>
 
           <p>${p.content}</p>
