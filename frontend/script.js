@@ -1,6 +1,5 @@
 const API = "http://54.221.9.161/api";
 
-
 /* SIGNUP */
 async function signup() {
   const name = document.getElementById("name").value;
@@ -54,21 +53,7 @@ async function post() {
   alert((await res.json()).message);
 }
 
-function autoScrollIfNeeded(container) {
-  const threshold = 100;
 
-  const position = container.scrollTop + container.clientHeight;
-  const height = container.scrollHeight;
-
-  if (height - position < threshold) {
-    container.scrollTop = container.scrollHeight;
-  }
-}
-
-function scrollToBottom() {
-  const container = document.getElementById("posts");
-  container.scrollTop = container.scrollHeight;
-}
 
 /* LOAD POSTS */
 async function loadPosts() {
@@ -79,6 +64,7 @@ async function loadPosts() {
     const postsDiv = document.getElementById("posts");
 
     data.forEach((p) => {
+      // If post already exists, skip it
       if (!document.getElementById("post-" + p.id)) {
         const postHTML = `
           <div class="message-card" id="post-${p.id}">
@@ -92,9 +78,6 @@ async function loadPosts() {
         `;
 
         postsDiv.insertAdjacentHTML("beforeend", postHTML);
-
-        // 👇 Auto-scroll only if user is at bottom
-        scrollToBottomIfNeeded(postsDiv);
       }
     });
 
@@ -121,12 +104,7 @@ async function deletePost(id) {
 if (window.location.pathname.includes("dashboard")) {
   loadPosts();
 
-  // Force scroll after initial load
-  setTimeout(() => {
-    const postsDiv = document.getElementById("posts");
-    postsDiv.scrollTop = postsDiv.scrollHeight;
-  }, 200);
-
+  // Refresh every second (1000ms)
   setInterval(loadPosts, 1000);
 }
 
