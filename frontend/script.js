@@ -54,15 +54,20 @@ async function post() {
   alert((await res.json()).message);
 }
 
-function scrollToBottomIfNeeded(container) {
-  const distanceFromBottom =
-    container.scrollHeight - container.scrollTop - container.clientHeight;
+function autoScrollIfNeeded(container) {
+  const threshold = 100;
 
-  const isUserNearBottom = distanceFromBottom < 100;
+  const position = container.scrollTop + container.clientHeight;
+  const height = container.scrollHeight;
 
-  if (isUserNearBottom) {
+  if (height - position < threshold) {
     container.scrollTop = container.scrollHeight;
   }
+}
+
+function scrollToBottom() {
+  const container = document.getElementById("posts");
+  container.scrollTop = container.scrollHeight;
 }
 
 /* LOAD POSTS */
@@ -72,26 +77,30 @@ async function loadPosts() {
     const data = await res.json();
 
     const postsDiv = document.getElementById("posts");
+    const userToken = localStorage.getItem("token");
 
     data.forEach((p) => {
       if (!document.getElementById("post-" + p.id)) {
+
+        const isMine = p.token === userToken; // optional if backend supports
+        const alignmentClass = isMine ? "sent" : "received";
+
         const postHTML = `
-          <div class="message-card" id="post-${p.id}">
-            <div>
+          <div class="message-card ${alignmentClass}" id="post-${p.id}">
+            <div class="meta">
               <b>${p.name}</b>
               <small>${new Date(p.created_at).toLocaleString()}</small>
             </div>
             <p>${p.content}</p>
-            <button onclick="deletePost(${p.id})">Delete</button>
+            ${isMine ? `<button onclick="deletePost(${p.id})">Delete</button>` : ""}
           </div>
         `;
 
         postsDiv.insertAdjacentHTML("beforeend", postHTML);
-
-        // 👇 Auto-scroll only if user is at bottom
-        scrollToBottomIfNeeded(postsDiv);
       }
     });
+
+    autoScrollIfNeeded(postsDiv);
 
   } catch (err) {
     console.error("Error loading posts:", err);
