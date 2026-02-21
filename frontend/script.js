@@ -87,14 +87,15 @@ async function loadPosts() {
 async function deletePost(id) {
   const token = localStorage.getItem("token");
 
-  await fetch(API + "/posts/" + id, {
+  const res = await fetch(API + "/posts/" + id, {
     method: "DELETE",
-    headers: {
-      Authorization: token,
-    },
+    headers: { Authorization: token },
   });
 
-  loadPosts();
+  if (res.ok) {
+    const postElement = document.getElementById("post-" + id);
+    if (postElement) postElement.remove();
+  }
 }
 
 // Initial load
