@@ -1,16 +1,6 @@
 const API = "http://54.221.9.161/api";
 
-function scrollToBottomIfNeeded(container) {
-  const isAtBottom =
-    container.scrollHeight - container.scrollTop <= container.clientHeight + 50;
 
-  if (isAtBottom) {
-    container.scrollTo({
-      top: container.scrollHeight,
-      behavior: "smooth"
-    });
-  }
-}
 /* SIGNUP */
 async function signup() {
   const name = document.getElementById("name").value;
@@ -64,7 +54,16 @@ async function post() {
   alert((await res.json()).message);
 }
 
+function scrollToBottomIfNeeded(container) {
+  const distanceFromBottom =
+    container.scrollHeight - container.scrollTop - container.clientHeight;
 
+  const isUserNearBottom = distanceFromBottom < 100;
+
+  if (isUserNearBottom) {
+    container.scrollTop = container.scrollHeight;
+  }
+}
 
 /* LOAD POSTS */
 async function loadPosts() {
@@ -117,7 +116,12 @@ async function deletePost(id) {
 if (window.location.pathname.includes("dashboard")) {
   loadPosts();
 
-  // Refresh every second (1000ms)
+  // Force scroll after initial load
+  setTimeout(() => {
+    const postsDiv = document.getElementById("posts");
+    postsDiv.scrollTop = postsDiv.scrollHeight;
+  }, 200);
+
   setInterval(loadPosts, 1000);
 }
 
