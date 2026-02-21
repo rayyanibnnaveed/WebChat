@@ -49,7 +49,7 @@ async function login() {
 
   // Store auth
   localStorage.setItem("token", data.token);
-  localStorage.setItem("userId", data.user.id);
+  localStorage.setItem("userId", data.id);
   localStorage.setItem("userName", data.user.name);
 
   window.location = "dashboard.html";
