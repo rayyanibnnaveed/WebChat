@@ -60,20 +60,24 @@ async function loadPosts() {
     const data = await res.json();
 
     const postsDiv = document.getElementById("posts");
-    postsDiv.innerHTML = ""; // Clear previous posts
 
     data.forEach((p) => {
-  postsDiv.innerHTML += `
-    <div class="message-card">
-      <div>
-        <b>${p.name}</b>
-        <small>${new Date(p.created_at).toLocaleString()}</small>
-      </div>
-      <p>${p.content}</p>
-      <button onclick="deletePost(${p.id})">Delete</button>
-    </div>
-  `;
-});
+      // If post already exists, skip it
+      if (!document.getElementById("post-" + p.id)) {
+        const postHTML = `
+          <div class="message-card" id="post-${p.id}">
+            <div>
+              <b>${p.name}</b>
+              <small>${new Date(p.created_at).toLocaleString()}</small>
+            </div>
+            <p>${p.content}</p>
+            <button onclick="deletePost(${p.id})">Delete</button>
+          </div>
+        `;
+
+        postsDiv.insertAdjacentHTML("beforeend", postHTML);
+      }
+    });
 
   } catch (err) {
     console.error("Error loading posts:", err);
