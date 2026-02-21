@@ -146,10 +146,7 @@ async function loadPosts() {
           <div>
             <b>${p.name}</b>
             <small>
-              ${new Date(p.created_at).toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit"
-              })}
+              ${p.created_at.slice(11, 16)}
             </small>
           </div>
 
