@@ -31,7 +31,6 @@ async function login() {
   const data = await res.json();
 
   localStorage.setItem("token", data.token);
-  localStorage.setItem("userId", data.user.id);
 
   window.location = "dashboard.html";
 }
@@ -54,8 +53,6 @@ async function post() {
   alert((await res.json()).message);
 }
 
-
-
 /* LOAD POSTS */
 async function loadPosts() {
   try {
@@ -63,18 +60,12 @@ async function loadPosts() {
     const data = await res.json();
 
     const postsDiv = document.getElementById("posts");
-    const loggedInUserId = localStorage.getItem("userId");
 
     data.forEach((p) => {
+      // If post already exists, skip it
       if (!document.getElementById("post-" + p.id)) {
-
-        const isMyMessage = p.user_id == loggedInUserId;
-
         const postHTML = `
-          <div 
-            class="message-card ${isMyMessage ? "my-message" : "other-message"}"
-            id="post-${p.id}"
-          >
+          <div class="message-card" id="post-${p.id}">
             <div>
               <b>${p.name}</b>
               <small>${new Date(p.created_at).toLocaleString()}</small>
