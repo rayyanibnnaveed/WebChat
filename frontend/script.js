@@ -119,9 +119,6 @@ async function loadPosts() {
 
     data.forEach((p) => {
 
-      console.log("Logged in:", loggedInUserId);
-      console.log("Post user:", p.user_id);
-        console.log("FULL POST OBJECT:", p);
       // Skip already rendered posts
       if (loadedPostIds.has(p.id)) return;
 
