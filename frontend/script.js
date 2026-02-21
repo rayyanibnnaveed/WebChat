@@ -1,5 +1,16 @@
 const API = "http://54.221.9.161/api";
 
+function scrollToBottomIfNeeded(container) {
+  const isAtBottom =
+    container.scrollHeight - container.scrollTop <= container.clientHeight + 50;
+
+  if (isAtBottom) {
+    container.scrollTo({
+      top: container.scrollHeight,
+      behavior: "smooth"
+    });
+  }
+}
 /* SIGNUP */
 async function signup() {
   const name = document.getElementById("name").value;
@@ -53,6 +64,8 @@ async function post() {
   alert((await res.json()).message);
 }
 
+
+
 /* LOAD POSTS */
 async function loadPosts() {
   try {
@@ -62,7 +75,6 @@ async function loadPosts() {
     const postsDiv = document.getElementById("posts");
 
     data.forEach((p) => {
-      // If post already exists, skip it
       if (!document.getElementById("post-" + p.id)) {
         const postHTML = `
           <div class="message-card" id="post-${p.id}">
@@ -76,6 +88,9 @@ async function loadPosts() {
         `;
 
         postsDiv.insertAdjacentHTML("beforeend", postHTML);
+
+        // 👇 Auto-scroll only if user is at bottom
+        scrollToBottomIfNeeded(postsDiv);
       }
     });
 
