@@ -145,7 +145,12 @@ async function loadPosts() {
         >
           <div>
             <b>${p.name}</b>
-            <small>${new Date(p.created_at + "Z").toLocaleTimeString()}</small>
+            <small>
+              ${new Date(p.created_at).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit"
+              })}
+            </small>
           </div>
 
           <p>${p.content}</p>
