@@ -122,7 +122,7 @@ async function loadPosts() {
       // Skip already rendered posts
       if (loadedPostIds.has(p.id)) return;
 
-      const isMyMessage = p.user_id == loggedInUserId;
+      const isMyMessage = Number(p.user_id) === Number(loggedInUserId);
 
       const postHTML = `
         <div 
