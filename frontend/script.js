@@ -1,5 +1,22 @@
 const API = "http://54.221.9.161/api";
+function parseJwt(token) {
+  try {
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map(function (c) {
+          return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+        })
+        .join("")
+    );
 
+    return JSON.parse(jsonPayload);
+  } catch (err) {
+    return null;
+  }
+}
 /* ========================= */
 /* GLOBALS */
 /* ========================= */
@@ -41,16 +58,24 @@ async function login() {
   });
 
   const data = await res.json();
+
   console.log("LOGIN RESPONSE:", data);
+
   if (!data.token) {
     alert("Login failed");
     return;
   }
 
-  // Store auth
   localStorage.setItem("token", data.token);
-  localStorage.setItem("userId", data.id);
-  localStorage.setItem("userName", data.user.name);
+
+  // 🔥 Decode token to get user info
+  const decoded = parseJwt(data.token);
+
+  console.log("DECODED TOKEN:", decoded);
+
+  if (decoded) {
+    localStorage.setItem("userId", decoded.id);
+  }
 
   window.location = "dashboard.html";
 }
