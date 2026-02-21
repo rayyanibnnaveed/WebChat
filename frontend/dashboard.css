@@ -129,14 +129,14 @@ body {
 /* Messages from other users */
 .other-message {
   align-self: flex-start;
-  background: #ffffff;
+  background: #8089d4;
   color: #333;
 }
 
 /* Messages from logged in user */
 .my-message {
   align-self: flex-end;
-  background: #dcf8c6;
+  background: #85ccec;
   color: #222;
 }
 /* Sender name */
