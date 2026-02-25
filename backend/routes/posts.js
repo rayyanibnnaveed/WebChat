@@ -2,7 +2,7 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const db = require("../db");
 const upload = require("../upload");
-
+const censorText = require("../utils/censor");
 const router = express.Router();
 
 /* AUTH MIDDLEWARE */
@@ -23,32 +23,36 @@ function auth(req, res, next) {
 
 /* CREATE POST */
 /* CREATE POST */
-router.post("/", auth, upload.single("image"), (req, res) => {
+router.post("/", auth, upload.single("image"), (req,res)=>{
 
-  const { content } = req.body;
+  let { content } = req.body;
+
   const userId = req.user.id;
 
   let imageUrl = null;
 
-  if(req.file){
-    imageUrl = req.file.location; // S3 URL
+  if(content){
+     content = censorText(content);
   }
 
-  const now = new Date().toISOString();
+  if(req.file){
+     imageUrl = req.file.location;
+  }
 
   db.query(
     "INSERT INTO posts(user_id,content,image_url,created_at) VALUES(?,?,?,?)",
-    [userId, content || "", imageUrl, now],
-    (err) => {
+    [userId, content || "", imageUrl, new Date().toISOString()],
+    (err)=>{
 
       if(err){
-        return res.status(500).json({ message:"DB Error" });
+        return res.status(500).json({message:"DB Error"});
       }
 
-      res.json({ message:"Post created" });
+      res.json({message:"Post sent"});
 
     }
   );
+
 });
 
 
