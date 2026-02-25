@@ -163,7 +163,7 @@ async function loadPosts() {
           </div>
 
           <p>${p.content || ""}</p>
-          <img src="${p.image_url}" />   
+          <img src="${p.image_url}" width="200"/>   
           <button onclick="deletePost(${p.id})">Delete</button>
         </div>
       `;
