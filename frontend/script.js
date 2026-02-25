@@ -1,4 +1,4 @@
-const API = "http://54.221.9.161/api";
+const API = "https://webchatproject.ice.lol/api";
 function parseJwt(token) {
   try {
     const base64Url = token.split(".")[1];
