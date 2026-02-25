@@ -55,7 +55,7 @@ router.post("/", auth, upload.single("image"), (req, res) => {
 /* GET POSTS */
 router.get("/", (req, res) => {
   db.query(
-    "SELECT posts.id, posts.user_id, users.name, posts.content, posts.created_at FROM posts JOIN users ON posts.user_id=users.id ORDER BY posts.created_at DESC",
+    "SELECT posts.id, posts.image_url, posts.user_id, users.name, posts.content, posts.created_at FROM posts JOIN users ON posts.user_id=users.id ORDER BY posts.created_at DESC",
     (err, data) => {
       res.json(data);
     }
