@@ -56,7 +56,22 @@ async function signup() {
   alert(data.message);
 }
 
+async function uploadImage() {
 
+  const file = document.getElementById("imageInput").files[0];
+
+  const formData = new FormData();
+  formData.append("image", file);
+
+  const res = await fetch("/api/upload-image", {
+    method: "POST",
+    body: formData
+  });
+
+  const data = await res.json();
+
+  console.log(data.imageUrl);
+}
 /* ========================= */
 /* LOGIN */
 /* ========================= */
