@@ -168,7 +168,7 @@ async function loadPosts() {
         </div>
       `;
 
-      
+      postsDiv.insertAdjacentHTML("beforeend", postHTML);
       loadedPostIds.add(p.id);
 
       // Auto scroll if user is near bottom
