@@ -56,22 +56,7 @@ async function signup() {
   alert(data.message);
 }
 
-async function uploadImage() {
 
-  const file = document.getElementById("imageInput").files[0];
-
-  const formData = new FormData();
-  formData.append("image", file);
-
-  const res = await fetch("/api/upload-image", {
-    method: "POST",
-    body: formData
-  });
-
-  const data = await res.json();
-
-  console.log(data.imageUrl);
-}
 /* ========================= */
 /* LOGIN */
 /* ========================= */
@@ -115,17 +100,26 @@ async function login() {
 /* ========================= */
 
 async function post() {
+
   const token = localStorage.getItem("token");
+
+  const text = content.value;
+  const file = document.getElementById("imageInput").files[0];
+
+  const formData = new FormData();
+
+  formData.append("content", text);
+
+  if (file) {
+    formData.append("image", file);
+  }
 
   const res = await fetch(API + "/posts", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
-      Authorization: token,
+      Authorization: token
     },
-    body: JSON.stringify({
-      content: content.value,
-    }),
+    body: formData
   });
 
   const data = await res.json();
@@ -169,7 +163,7 @@ async function loadPosts() {
           </div>
 
           <p>${p.content}</p>
-
+          ${p.image_url ? `<img src="${p.image_url}" width="200"/>` : ""}
           <button onclick="deletePost(${p.id})">Delete</button>
         </div>
       `;
