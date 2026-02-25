@@ -21,6 +21,9 @@ const upload = multer({
       cb(null, Date.now() + "-" + file.originalname);
     },
   }),
+  limits: {
+    fileSize: 15 * 1024 * 1024,
+  },
 });
 
 module.exports = upload;
