@@ -1,7 +1,7 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const db = require("../db");
-const upload = require("../backend/upload");
+const upload = require("../upload");
 
 const router = express.Router();
 

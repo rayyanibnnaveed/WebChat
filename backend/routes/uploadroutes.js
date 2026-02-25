@@ -1,4 +1,4 @@
-const upload = require("../backend/upload");
+const upload = require("../upload");
 
 router.post("/upload-image", upload.single("image"), async (req, res) => {
   res.json({
