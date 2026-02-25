@@ -2,8 +2,6 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const db = require("../db");
 const upload = require("../upload");
-const Filter = require("bad-words");
-const filter = new Filter();
 const router = express.Router();
 
 /* AUTH MIDDLEWARE */
