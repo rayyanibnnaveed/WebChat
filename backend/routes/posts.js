@@ -1,6 +1,7 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const db = require("../db");
+const upload = require("../backend/upload");
 
 const router = express.Router();
 
@@ -21,20 +22,31 @@ function auth(req, res, next) {
 
 
 /* CREATE POST */
-router.post("/", auth, (req, res) => {
+/* CREATE POST */
+router.post("/", auth, upload.single("image"), (req, res) => {
+
   const { content } = req.body;
   const userId = req.user.id;
 
-  if (!content)
-    return res.status(400).json({ message: "Content required" });
+  let imageUrl = null;
+
+  if(req.file){
+    imageUrl = req.file.location; // S3 URL
+  }
 
   const now = new Date().toISOString();
 
   db.query(
-    "INSERT INTO posts(user_id,content,created_at) VALUES(?,?,?)",
-    [userId, content, now],
+    "INSERT INTO posts(user_id,content,image_url,created_at) VALUES(?,?,?,?)",
+    [userId, content || "", imageUrl, now],
     (err) => {
-      
+
+      if(err){
+        return res.status(500).json({ message:"DB Error" });
+      }
+
+      res.json({ message:"Post created" });
+
     }
   );
 });
